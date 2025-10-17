@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Calendar</title>
+</head>
+<body>
+    <button id="previousCalendarMonth">Previous</button>
+    <button id="nextCalendarMonth">Next</button>
+
+    <div id ="currentMonth"></div>
+    <div id="mainContent"></div>
+
+    <script type="text/javascript">
+        let _myDate = new Date();
+        let _currentMonth = _myDate.getMonth();
+        let _currentDay = _myDate.getDate();
+        let _currentYear = _myDate.getFullYear();
+        let tmpPreviousCalendarMonth = document.getElementById('previousCalendarMonth');
+        const tmpNextCalendarMonth = document.getElementById('nextCalendarMonth');
+        const tmpMain = document.getElementById('mainContent');
+        const tmpCurrentCalendarMonth = document.getElementById('currentMonth');
+        const _daysOfTheWeek = ( 
+                            ["Sunday",
+                            "Monday",
+                            "Tuesday", 
+                            "Wednesday", 
+                            "Friday", 
+                            "Thursday", 
+                            "Saturday"
+                        ]);
+                        
+        const _monthsOfTheYear = (
+                                ["January", 
+                                "February", 
+                                "March", 
+                                "April", 
+                                "May", 
+                                "June",
+                                "July", 
+                                "August", 
+                                "September", 
+                                "October",
+                                "November", 
+                                "December"
+                            ]);
+
+        const _calendarMonths = (
+                            [
+                            "Jan",
+                            "Feb",
+                            "Mar",
+                            "Apr",
+                            "May",
+                            "Jun",
+                            "Jul",
+                            "Aug",
+                            "Sep",
+                            "Oct",
+                            "Nov",
+                            "Dec"
+                        ]);
+
+        tmpMain.innerHTML = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
+
+        let num = 0;
+        let tmpCurrentDaysInMonth = getDaysInMonth(_currentYear, _currentMonth);
+
+        function getDaysInMonth(pYear, pMonth)
+        {
+            return new Date(pYear, pMonth, 0).getDate();
+        }
+
+        function renderCalendar()
+        {
+            for(i = 0; i < 7; i++)
+            {
+                for(j = 0; j < 5; j++)
+                {
+
+                }
+            }
+        }
+
+        if (num === undefined)
+        {
+            num = 0;
+        }
+
+        tmpNextCalendarMonth.addEventListener('click', function()
+        {
+            num++;
+            console.log(num);
+            if (num > _monthsOfTheYear.length-_currentMonth-1)
+            {
+                num = -(_currentMonth);
+
+                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear++;
+            }
+            else
+            {
+                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear;
+            }
+        });
+        tmpPreviousCalendarMonth.addEventListener('click', function()
+        {
+            if (num < -(_currentMonth-1))
+            {
+                num = _monthsOfTheYear.length-_currentMonth-1;
+                console.log(num);
+                //num = Math.abs(num);
+
+                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear--;
+            }
+            else
+            {
+                num--;
+                console.log(num);
+
+                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear;
+            }
+        });
+    </script>
+</body>
+</html>

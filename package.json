@@ -1,0 +1,16 @@
+{
+  "name": "calendar",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "calendar app",
+  "main": "createCalendar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tauri": "tauri"
+  },
+  "author": "Aesop",
+  "license": "ISC",
+  "devDependencies": {
+    "@tauri-apps/cli": "^1"
+  }
+}

@@ -1,0 +1,161 @@
+<html>
+	<head><title>Simple Self Contained Calendar from Before ES6 Classes</title>
+<body>
+	<div id="Time_Display"><h1>Today's Time and Date: <span id="Time_Display_Link"></span></h1></div>
+	<div id="Calendar"></div>
+	<script type="text/javascript">
+		var _CurrentTime = new Date();
+		var _CurrentYear = _CurrentTime.getFullYear();
+		var _CurrentMonth = _CurrentTime.getMonth();
+		var _CurrentDay = _CurrentTime.getDate();
+		var _CurrentTimeTimeout = false;
+		var _WeekDays = (
+		[
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday"
+		]);
+		var _Months = (
+		[
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December'
+		]);
+		function zeroPad(pValue) { return ('00'+pValue.toString()).slice(-2); }
+		function getTimeDisplay()
+		{
+			_CurrentTime = new Date();
+			let tmpHour = zeroPad(_CurrentTime.getHours());
+			let tmpMinute = zeroPad(_CurrentTime.getMinutes());
+			let tmpSeconds = zeroPad(_CurrentTime.getSeconds());
+
+			_CurrentYear = _CurrentTime.getFullYear();
+			_CurrentMonth = _CurrentTime.getMonth();
+			_CurrentDay = _CurrentTime.getDate();
+			let tmpMonth = _Months[_CurrentMonth];
+			let tmpWeekDay = _WeekDays[_CurrentTime.getDay()];
+
+			return `${tmpHour}.${tmpMinute}.${tmpSeconds} ${tmpWeekDay} ${tmpMonth} ${_CurrentDay}, ${_CurrentYear}`;
+		}
+		function updateTimeDisplay()
+		{
+			document.getElementById('Time_Display_Link').innerHTML = getTimeDisplay();
+		}
+
+		var _CalendarDays = (
+		[
+			"sun",
+			"mon",
+			"tue",
+			"wed",
+			"thu",
+			"fri",
+			"sat"
+		]);
+		var _CurrentCalendarYear = _CurrentYear;
+		var _CurrentCalendarMonth = _CurrentMonth+1;
+		function daysInCalendarMonth(pYear, pMonth)
+		{
+			// Thanks stack overflow
+			// https://stackoverflow.com/questions/315760/what-is-the-best-way-to-determine-the-number-of-days-in-a-month-with-javascript
+			return new Date(pYear, pMonth, 0).getDate();
+		}
+		function renderCalendar()
+		{
+			// Render _CurrentCalendarYear and _CurrentCalendarMonth
+			var tmpDaysInMonth = daysInCalendarMonth(_CurrentCalendarYear, _CurrentCalendarMonth);
+			var tmpDaysInMonthPrevious = daysInCalendarMonth(_CurrentCalendarYear, _CurrentCalendarMonth - 1);
+			var tmpFirstWeekDay = new Date(_CurrentCalendarYear, _CurrentCalendarMonth, 1).getDay();
+			var tmpLastMonthWeekDayEnd = 6 - tmpFirstWeekDay;
+
+			// Render the navigation and the header.
+			var tmpCalendarDisplay = '<table class="Calendar_Table"><tr><th colspan="7"><a href="#" ignorelink="true" id="Calendar_Table_Previous">&nbsp;&lt;</a>&nbsp;'+_Months[_CurrentCalendarMonth-1]+' '+_CurrentCalendarYear+'&nbsp;<a href="#" ignorelink="true" id="Calendar_Table_Next">&gt;&nbsp;</a></th></tr>';
+			var tmpCurrentWeek = 0;
+			var tmpCurrentDay = 1;
+			var tmpNextMonthDay = 1;
+			var tmpMoreDays = true;
+			// Doing this old school but it works with few LOC so screw it
+			while(tmpMoreDays)
+			{
+				tmpCalendarDisplay += '<tr>';
+				for (var i = 0; i < 7; i++)
+				{
+					if (tmpCurrentWeek == 0)
+					{
+						tmpCalendarDisplay += '<td class="Calendar_DayName">'+_CalendarDays[i]+'</td>';
+					}
+					else if (tmpCurrentWeek == 1 && i < tmpFirstWeekDay)
+					{
+						var tmpDayDisplay = tmpDaysInMonthPrevious - tmpLastMonthWeekDayEnd;
+						tmpCalendarDisplay += '<td class="Calendar_Day Calendar_Day_OtherMonth">'+tmpDayDisplay+'</td>';
+						tmpLastMonthWeekDayEnd --;				
+					}
+					else if (tmpCurrentDay > tmpDaysInMonth)
+					{
+						tmpCalendarDisplay += '<td class="Calendar_Day Calendar_Day_OtherMonth">'+tmpNextMonthDay+'</td>';
+						tmpNextMonthDay ++;
+					}
+					else
+					{
+						tmpCalendarDisplay += '<td class="Calendar_Day';
+						tmpCalendarDisplay += '">'+tmpCurrentDay+'</td>';
+						tmpCurrentDay++;
+					}
+				}
+				tmpCalendarDisplay += '</tr>';
+				if (tmpCurrentDay > tmpDaysInMonth)
+					tmpMoreDays = false;
+				tmpCurrentWeek++;
+			}
+			tmpCalendarDisplay += '</table>';
+			document.getElementById('Calendar').innerHTML = tmpCalendarDisplay;
+			document.getElementById('Calendar_Table_Previous').addEventListener('click', calendarPreviousMonth);
+			document.getElementById('Calendar_Table_Next').addEventListener('click', calendarNextMonth);
+			return true;
+		}
+		function calendarNextMonth()
+		{
+			if (_CurrentCalendarMonth == 12)
+			{
+				_CurrentCalendarYear++;
+				_CurrentCalendarMonth = 1;
+			}
+			else
+			{
+				_CurrentCalendarMonth++;
+			}
+			renderCalendar();
+			return true;
+		}
+		function calendarPreviousMonth()
+		{
+			if (_CurrentCalendarMonth == 1)
+			{
+				_CurrentCalendarYear--;
+				_CurrentCalendarMonth = 12;
+			}
+			else
+			{
+				_CurrentCalendarMonth--;
+			}
+			renderCalendar();
+			return true;
+		}
+		updateTimeDisplay();
+		renderCalendar();
+	</script>
+	</body>
+</html>

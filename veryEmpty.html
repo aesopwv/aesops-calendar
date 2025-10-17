@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>So simple</title>
+</head>
+<body>
+    <button id="bla">Click here!</button>
+
+    <button id="shutUp">No click here!</button>
+
+    <button id="monthsButton">Please whatever you do don't click here!</button>
+
+    <div id="mainContent"></div>
+
+    <script type="text/javascript">
+        const button1 = document.getElementById('bla');
+        const button2 = document.getElementById('shutUp');
+        const button3 = document.getElementById('monthsButton');
+        const _daysOfTheWeek = ( 
+                    ["Sunday",
+                    "Monday",
+                    "Tuesday", 
+                    "Wednesday", 
+                    "Friday", 
+                    "Thursday", 
+                    "Saturday"
+                ]);
+        const _monthsOfTheYear = (
+                        ["January", 
+                        "February", 
+                        "March", 
+                        "April", 
+                        "May", 
+                        "June",
+                        "July", 
+                        "August", 
+                        "September", 
+                        "October",
+                        "November", 
+                        "December"
+                    ]);
+    let tmpElement = document.getElementById('mainContent')
+
+    let num = 0;
+        button3.addEventListener('click', function()
+    {
+        for(i = 0; i<_monthsOfTheYear.length; i++)
+    {
+        num += 1;
+        tmpElement.innerHTML += num + ". " + "<h1>" + _monthsOfTheYear[i%_monthsOfTheYear.length] + "</h1>";
+    }
+    })
+        button2.addEventListener('click', function()
+    {
+        for(i = 0; i < 1; i++)
+    {
+        num +=1;
+        tmpElement.innerHTML += num + " ." + "<h1>Shut up!!!!!</h1>";
+    }
+    });
+        button1.addEventListener('click', function()
+    {
+        for(i = 0; i < 7; i++)
+    {
+        num += 1;
+
+        tmpElement.innerHTML += num + ". " + "<h1>" + _daysOfTheWeek[i%_daysOfTheWeek.length] + "</h1>";
+    }
+    });
+        // Assign the div element to a variable (tmpElement)
+        /*let tmpElement = document.getElementById('butthole');
+        tmpElement.innerHTML = "<h1>barf</h1>";*/
+    </script>
+</body>
+</html>
