@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <button id="prev"><</button>
+    <button id="next">></button>
+    <div id="mainContent"></div>
+    <script>
+        let d = new Date();
+        let day = d.getDay();
+        let _currentMonth = d.getMonth();
+        let _currentDay = d.getDay();
+        let _currentYear = d.getFullYear();
+        const tmpPreviousCalendarMonth = document.getElementById('prev');
+        const tmpNextCalendarMonth = document.getElementById('next');
+        const tmpMain = document.getElementById('mainContent');
+        const _daysOfTheWeek = ( 
+                    ["Sun",
+                    "Mon",
+                    "Tue", 
+                    "Wed", 
+                    "Thu",
+                    "Fri", 
+                    "Sat"
+                ]);
+                const _monthsOfTheYear = (
+                        ["January", 
+                        "February", 
+                        "March", 
+                        "April", 
+                        "May", 
+                        "June",
+                        "July", 
+                        "August", 
+                        "September", 
+                        "October",
+                        "November", 
+                        "December"
+                    ]);
+                    
+        let table = "<table>";
+        
+        function daysInCalendarMonth(pYear, pMonth)
+		{
+			return new Date(pYear, pMonth + 1, 0).getDate();
+		}
+
+        let daysInMonth = daysInCalendarMonth(_currentYear, _currentMonth);
+        let firstWeekDay = new Date(_currentYear, _currentMonth, 1).getDay();
+        let daysinLastMonth = daysInCalendarMonth(_currentYear, _currentMonth-1);
+
+
+        function generateCalendar(pCurrentYear, pCurrentMonth)
+        {
+            let currentWeek = 0;
+            let nextMonthDay = 1;
+            let currentDay = 1;
+            let lastMonthWeekDayEnd = 6-firstWeekDay;
+            let moreDays = true;
+            table = "<h1>" + _monthsOfTheYear[pCurrentMonth] + " " + pCurrentYear + "</h1><table>";
+            while (moreDays)
+            {
+                table += "<tr>";
+                for ( i = 0; i < 7; i++ )
+                {
+                    if (currentWeek == 0)
+                    {
+                        table += "<th>" + _daysOfTheWeek[i] + "</th>";
+                    }
+                    else if (currentWeek == 1 && i < 3)
+                    {
+                        let firstThreeDays = daysinLastMonth-2+i;
+                        table += "<td>" + firstThreeDays + "</td>";
+                    }
+                    else if (currentWeek == 1 && i >= 3)
+                    {
+                        table += "<td>" + currentDay + "</td>";
+                        currentDay++;
+                    }
+                    else if (currentDay > daysInCalendarMonth(pCurrentYear, pCurrentMonth))
+                    {
+                        table += "<td>" + nextMonthDay + "</td>";
+                        nextMonthDay++;
+                    }
+                    else
+                    {
+                        table += "<td>" + currentDay + "</td>";
+                        currentDay++
+                    }
+                }
+                table += "</tr>";
+                if (currentDay > daysInCalendarMonth(pCurrentYear, pCurrentMonth))
+                {
+                    moreDays = false;
+                }
+                currentWeek++;
+            }
+                table += "</table>";
+                tmpMain.innerHTML = table;
+        }
+
+        tmpPreviousCalendarMonth.addEventListener('click', toPreviousMonth);
+        tmpNextCalendarMonth.addEventListener('click', toNextMonth);
+
+        function toPreviousMonth()
+        {
+                if (_currentMonth == 0)
+                {
+                    _currentYear--;
+                    _currentMonth = 11;
+                }
+                else
+                {
+                    _currentMonth--;
+                }
+                generateCalendar(_currentYear, _currentMonth);
+                return true;
+        }
+
+        function toNextMonth()
+        {
+                if (_currentMonth == 11)
+                {
+                    _currentYear++;
+                    _currentMonth = 0;
+                }
+                else
+                {
+                    _currentMonth++;
+                }
+                generateCalendar(_currentYear, _currentMonth);
+                return true;
+        }
+        generateCalendar(_currentYear, _currentMonth);
+    </script>
+</body>
+</html>

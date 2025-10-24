@@ -60,65 +60,50 @@
                             "Dec"
                         ]);
 
-        tmpMain.innerHTML = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
-
-        let num = 0;
-        let tmpCurrentDaysInMonth = getDaysInMonth(_currentYear, _currentMonth);
-
-        function getDaysInMonth(pYear, pMonth)
+        function updateCalendar()
         {
-            return new Date(pYear, pMonth, 0).getDate();
+            
         }
 
-        function renderCalendar()
+        let _calendarDisplay = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
+
+        function toPreviousMonth()
         {
-            for(i = 0; i < 7; i++)
+                tmpPreviousCalendarMonth.addEventListener('click', function()
             {
-                for(j = 0; j < 5; j++)
+                if (_currentMonth == 0)
                 {
+                    _currentYear--;
+                    _currentMonth = 11;
 
+                    tmpMain.innerHTML = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
                 }
-            }
+                else
+                {
+                    _currentMonth--;
+                    tmpMain.innerHTML = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
+                }
+            });
         }
 
-        if (num === undefined)
+        function toNextMonth()
         {
-            num = 0;
+                tmpNextCalendarMonth.addEventListener('click', function()
+            {
+                if (_currentMonth == 11)
+                {
+                    _currentYear++;
+                    _currentMonth = 0;
+
+                    tmpMain.innerHTML = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
+                }
+                else
+                {
+                    _currentMonth++;
+                    tmpMain.innerHTML = _monthsOfTheYear[_currentMonth] + " " + _currentDay + ", " + _currentYear;
+                }
+            });
         }
-
-        tmpNextCalendarMonth.addEventListener('click', function()
-        {
-            num++;
-            console.log(num);
-            if (num > _monthsOfTheYear.length-_currentMonth-1)
-            {
-                num = -(_currentMonth);
-
-                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear++;
-            }
-            else
-            {
-                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear;
-            }
-        });
-        tmpPreviousCalendarMonth.addEventListener('click', function()
-        {
-            if (num < -(_currentMonth-1))
-            {
-                num = _monthsOfTheYear.length-_currentMonth-1;
-                console.log(num);
-                //num = Math.abs(num);
-
-                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear--;
-            }
-            else
-            {
-                num--;
-                console.log(num);
-
-                tmpMain.innerHTML = _monthsOfTheYear[_currentMonth + num] + " " + _currentDay + ", " + _currentYear;
-            }
-        });
     </script>
 </body>
 </html>
