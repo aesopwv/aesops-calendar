@@ -1,39 +1,165 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri App</title>
-    <script type="module" src="/main.js" defer></script>
-  </head>
+<head>
+    <title>Dynamic Calendar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="calendar">
+        <div id="calendar-header">
+            <button class='calendar-btn' id="prev">&lt;</button>
+            <div id="calendarHeader"></div>
+            <button class='calendar-btn' id="next">&gt;</button>
+        </div>
 
-  <body>
-    <main class="container">
-      <h1>Welcome to Tauri</h1>
+    <div id="mainContent"></div>
 
-      <div class="row">
-        <a href="https://tauri.app" target="_blank">
-          <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-          target="_blank"
-        >
-          <img
-            src="/assets/javascript.svg"
-            class="logo vanilla"
-            alt="JavaScript logo"
-          />
-        </a>
-      </div>
-      <p>Click on the Tauri logo to learn more about the framework</p>
+    </div>
+    <script>
+        let _currentDate = new Date();
+        let _currentMonth = _currentDate.getMonth();
+        let _currentYear = _currentDate.getFullYear();
+        const _ButtonPreviousMonth = document.getElementById('prev');
+        const _ButtonNextMonth = document.getElementById('next');
+        const tmpCalendarRenderContainer = document.getElementById('mainContent');
+        const _daysOfTheWeek = ( 
+                    ["Sun",
+                    "Mon",
+                    "Tue", 
+                    "Wed", 
+                    "Thu",
+                    "Fri", 
+                    "Sat"
+                    ]);
 
-      <form class="row" id="greet-form">
-        <input id="greet-input" placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-      <p id="greet-msg"></p>
-    </main>
-  </body>
+        const _monthsOfTheYear = (
+                ["January", 
+                "February", 
+                "March", 
+                "April", 
+                "May", 
+                "June",
+                "July", 
+                "August", 
+                "September", 
+                "October",
+                "November", 
+                "December"
+                ]);
+                
+        
+        function daysInCalendarMonth(pYear, pMonth)
+		{
+			return new Date(pYear, pMonth + 1, 0).getDate();
+		}
+
+        function generateCalendar(pCurrentYear, pCurrentMonth)
+        {
+            let tmpTable = "<table>";
+            tmpTable += "<tr>";
+            for ( i = 0; i < 7; i++)
+            {
+                tmpTable += "<th class='day'>" + _daysOfTheWeek[i] + "</th>";
+            }
+            tmpTable += "</tr>";
+            // get the number of weeks in the current month 
+            let tmpNumberOfDaysInTheMonth = daysInCalendarMonth(pCurrentYear, pCurrentMonth);
+            let tmpNumberOfDaysInLastMonth = daysInCalendarMonth(pCurrentYear, pCurrentMonth - 1)
+            let tmpNumberOfWeeksInCurrentMonth = Math.ceil(tmpNumberOfDaysInTheMonth / 7);
+            let tmpNumberOfDaysToRender = tmpNumberOfWeeksInCurrentMonth * 7;
+            let tmpFirstDayOfTheCurrentMonth = new Date(pCurrentYear, pCurrentMonth, 1);
+            let tmpWeekDayIndexOfTheFirstDayOfTheCurrentMonth = tmpFirstDayOfTheCurrentMonth.getDay();
+            let tmpCurrentlyRenderingDayOfThisMonth = 1;
+            let tmpCurrentlyRenderingDayOfNextMonth = 1;
+            let tmpCurrentlyRenderingDayOfLastMonth = tmpNumberOfDaysInLastMonth - tmpWeekDayIndexOfTheFirstDayOfTheCurrentMonth + 1;
+
+            if ( tmpWeekDayIndexOfTheFirstDayOfTheCurrentMonth > 4)
+            {
+                tmpNumberOfDaysToRender += 7;
+            }
+            for ( i = 0; i < tmpNumberOfDaysToRender; i++)
+            {
+                // this is which week of the month we are on starting at 0
+                let tmpWeekIndex = Math.floor(i / 7);
+                // this is whether it's day 0 to day 6 as displayed on the calendar
+                let tmpWeekDayIndex = i % 7;
+                if ( tmpWeekDayIndex == 0)
+                {
+                    tmpTable += "<tr>";
+                }
+                // first week of the month
+                if ( tmpWeekIndex == 0)
+                {
+                    // if it's before the first day of this month
+                    if ( tmpWeekDayIndex < tmpWeekDayIndexOfTheFirstDayOfTheCurrentMonth)
+                    {
+                        tmpTable += "<td class='day lastMonth'>" + tmpCurrentlyRenderingDayOfLastMonth + "</td>";
+                        tmpCurrentlyRenderingDayOfLastMonth++;
+                    }
+                    else
+                    {
+                        tmpTable += "<td class='day thisMonth'>" + tmpCurrentlyRenderingDayOfThisMonth + "</td>";
+                        tmpCurrentlyRenderingDayOfThisMonth++;
+                    }
+                }
+                // any ohter week of the month
+                else
+                {
+                    if ( tmpCurrentlyRenderingDayOfThisMonth <= tmpNumberOfDaysInTheMonth)
+                    {
+                        tmpTable += "<td class='day thisMonth'>" + tmpCurrentlyRenderingDayOfThisMonth + "</td>";
+                        tmpCurrentlyRenderingDayOfThisMonth++;
+                    }
+                    else
+                    {
+                        tmpTable += "<td class='day nextMonth'>" + tmpCurrentlyRenderingDayOfNextMonth + "</td>";
+                        tmpCurrentlyRenderingDayOfNextMonth++;
+                    }
+                }
+                // if it's the last rendered day of the week
+                if ( tmpWeekDayIndex == 6)
+                {
+                    tmpTable += "</tr>";
+                }
+            }
+                tmpTable += "</table>";
+                tmpCalendarRenderContainer.innerHTML = tmpTable;
+                document.getElementById("calendarHeader").innerHTML = "<h1 class='dateHeader'>" + _monthsOfTheYear[pCurrentMonth] + " " + pCurrentYear + "</h1>";
+        }
+
+        _ButtonPreviousMonth.addEventListener('click', toPreviousMonth);
+        _ButtonNextMonth.addEventListener('click', toNextMonth);
+
+        function toPreviousMonth()
+        {
+                if (_currentMonth == 0)
+                {
+                    _currentYear--;
+                    _currentMonth = 11;
+                }
+                else
+                {
+                    _currentMonth--;
+                }
+                generateCalendar(_currentYear, _currentMonth);
+                return true;
+        }
+
+        function toNextMonth()
+        {
+                if (_currentMonth == 11)
+                {
+                    _currentYear++;
+                    _currentMonth = 0;
+                }
+                else
+                {
+                    _currentMonth++;
+                }
+                generateCalendar(_currentYear, _currentMonth);
+                return true;
+        }
+        generateCalendar(_currentYear, _currentMonth);
+    </script>
+</body>
 </html>
