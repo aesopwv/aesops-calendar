@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Dynamic Calendar</title>
 </head>
 <body>
-    <button id="prev"><</button>
-    <button id="next">></button>
+    <link rel="stylesheet" href="style.css">
+    <div id="calendar">
+        <div id="calendar-header">
+            <button class='calendar-btn' id="prev">&lt;</button>
+            <div id="calendarHeader"></div>
+            <button class='calendar-btn' id="next">&gt;</button>
+        </div>
+
     <div id="mainContent"></div>
+
+    </div>
     <script>
         let d = new Date();
         let day = d.getDay();
@@ -59,37 +67,73 @@
             let currentDay = 1;
             let lastMonthWeekDayEnd = 6-firstWeekDay;
             let moreDays = true;
-            table = "<h1>" + _monthsOfTheYear[pCurrentMonth] + " " + pCurrentYear + "</h1><table>";
+            table = "<table>";
+                table += "<tr>";
+                table += "<th>";
+            for ( i = 0; i < 7; i++)
+            {
+                table += "<td class='day'>" + _daysOfTheWeek[i] + "</td>";
+            }
+            table += "</th>";
+            table += "</tr>";
             while (moreDays)
             {
                 table += "<tr>";
+                table += "<th>";
+                table += "<td class='day'>" + currentDay + "</td>";
+                currentDay++;
+                table += "<td class='day'>" + currentDay + "</td>";
+                currentDay++;
+                table += "<td class='day'>" + currentDay + "</td>";
+                currentDay++;
+                table += "<td class='day'>" + currentDay + "</td>";
+                currentDay++;
+                table += "<td class='day'>" + currentDay + "</td>";
+                currentDay++;
+                table += "<td class='day'>" + currentDay + "</td>";
+                currentDay++;
+                table += "<td class='day'>" + currentDay + "</td>";
+                table += "</th>";
+                table += "</tr>";
+                if (currentDay = 7)
+                {
+                    moreDays = false;
+                }
+                /*
                 for ( i = 0; i < 7; i++ )
                 {
+                    // if it's the first row, print out the day of the week index i
                     if (currentWeek == 0)
                     {
-                        table += "<th>" + _daysOfTheWeek[i] + "</th>";
+                        table += "<th class='daysOfWeek'>" + _daysOfTheWeek[i] + "</th>";
                     }
-                    else if (currentWeek == 1 && i < 3)
+                    // if it's the second row and i is less than the first weekday of the month, print the last days of the last month 
+                    else if (currentWeek == 1 && i < lastMonthWeekDayEnd)
                     {
                         let firstThreeDays = daysinLastMonth-2+i;
-                        table += "<td>" + firstThreeDays + "</td>";
+                        table += "<td class='day'>" + firstThreeDays + "</td>";
                     }
-                    else if (currentWeek == 1 && i >= 3)
+                    // if it's the second row and i is greater than the first wekday of the month, print out the current day of the month and increment by 1
+                    else if (currentWeek == 1 && i >= lastMonthWeekDayEnd)
                     {
-                        table += "<td>" + currentDay + "</td>";
+                        table += "<td class='day'>" + currentDay + "</td>";
                         currentDay++;
                     }
+                    // if the current day is greater than the number of days in the month, print the days in the next month and increment by 1
                     else if (currentDay > daysInCalendarMonth(pCurrentYear, pCurrentMonth))
                     {
-                        table += "<td>" + nextMonthDay + "</td>";
+                        table += "<td class='day'>" + nextMonthDay + "</td>";
                         nextMonthDay++;
                     }
+                    // if none of the above conditions are met, print the current day and increment by 1
                     else
                     {
-                        table += "<td>" + currentDay + "</td>";
+                        table += "<td class='day'>" + currentDay + "</td>";
                         currentDay++
                     }
+                
                 }
+                */
                 table += "</tr>";
                 if (currentDay > daysInCalendarMonth(pCurrentYear, pCurrentMonth))
                 {
@@ -99,6 +143,7 @@
             }
                 table += "</table>";
                 tmpMain.innerHTML = table;
+                document.getElementById("calendarHeader").innerHTML = "<h1 class='dateHeader'>" + _monthsOfTheYear[pCurrentMonth] + " " + pCurrentYear + "</h1>";
         }
 
         tmpPreviousCalendarMonth.addEventListener('click', toPreviousMonth);
