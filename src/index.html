@@ -3,25 +3,33 @@
 <head>
     <title>Dynamic Calendar</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body 
+        {
+            background-color: #333;
+        }
+    </style>
+
 </head>
 <body>
     <div id="calendar">
         <div id="calendar-header">
-            <button class='calendar-btn' id="prev">&lt;</button>
             <div id="calendarHeader"></div>
+            <button class='calendar-btn' id="prev">&lt;</button>
+            <button class='calendar-btn' id="current">today</button>
             <button class='calendar-btn' id="next">&gt;</button>
         </div>
-
-    <div id="mainContent"></div>
-
+        <div id="mainContent"></div>
     </div>
     <script>
         let _currentDate = new Date();
         let _currentMonth = _currentDate.getMonth();
         let _currentYear = _currentDate.getFullYear();
-        const _ButtonPreviousMonth = document.getElementById('prev');
-        const _ButtonNextMonth = document.getElementById('next');
-        const tmpCalendarRenderContainer = document.getElementById('mainContent');
+        const _todaysDate = new Date;
+        const _buttonPreviousMonth = document.getElementById('prev');
+        const _buttonNextMonth = document.getElementById('next');
+        const _buttonThisMonth = document.getElementById('current');
+        const _calendarRenderContainer = document.getElementById('mainContent');
         const _daysOfTheWeek = ( 
                     ["Sun",
                     "Mon",
@@ -48,6 +56,7 @@
                 ]);
                 
         
+        // calculates the number of days in a given month of a year
         function daysInCalendarMonth(pYear, pMonth)
 		{
 			return new Date(pYear, pMonth + 1, 0).getDate();
@@ -55,7 +64,7 @@
 
         function generateCalendar(pCurrentYear, pCurrentMonth)
         {
-            let tmpTable = "<table>";
+            let tmpTable = "<table class='calendar-table'>";
             tmpTable += "<tr>";
             for ( i = 0; i < 7; i++)
             {
@@ -83,6 +92,7 @@
                 let tmpWeekIndex = Math.floor(i / 7);
                 // this is whether it's day 0 to day 6 as displayed on the calendar
                 let tmpWeekDayIndex = i % 7;
+
                 if ( tmpWeekDayIndex == 0)
                 {
                     tmpTable += "<tr>";
@@ -93,26 +103,26 @@
                     // if it's before the first day of this month
                     if ( tmpWeekDayIndex < tmpWeekDayIndexOfTheFirstDayOfTheCurrentMonth)
                     {
-                        tmpTable += "<td class='day lastMonth'>" + tmpCurrentlyRenderingDayOfLastMonth + "</td>";
+                        tmpTable += "<td><div class='day lastMonth'>" + tmpCurrentlyRenderingDayOfLastMonth + "</div></td>";
                         tmpCurrentlyRenderingDayOfLastMonth++;
                     }
                     else
                     {
-                        tmpTable += "<td class='day thisMonth'>" + tmpCurrentlyRenderingDayOfThisMonth + "</td>";
+                        tmpTable += "<td><div class='day thisMonth'>" + tmpCurrentlyRenderingDayOfThisMonth + "</div></td>";
                         tmpCurrentlyRenderingDayOfThisMonth++;
                     }
                 }
-                // any ohter week of the month
+                // any other week of the month
                 else
                 {
                     if ( tmpCurrentlyRenderingDayOfThisMonth <= tmpNumberOfDaysInTheMonth)
                     {
-                        tmpTable += "<td class='day thisMonth'>" + tmpCurrentlyRenderingDayOfThisMonth + "</td>";
+                        tmpTable += "<td><div class='day thisMonth'>" + tmpCurrentlyRenderingDayOfThisMonth + "</div></td>";
                         tmpCurrentlyRenderingDayOfThisMonth++;
                     }
                     else
                     {
-                        tmpTable += "<td class='day nextMonth'>" + tmpCurrentlyRenderingDayOfNextMonth + "</td>";
+                        tmpTable += "<td><div class='day nextMonth'>" + tmpCurrentlyRenderingDayOfNextMonth + "</div></td>";
                         tmpCurrentlyRenderingDayOfNextMonth++;
                     }
                 }
@@ -123,13 +133,16 @@
                 }
             }
                 tmpTable += "</table>";
-                tmpCalendarRenderContainer.innerHTML = tmpTable;
+                _calendarRenderContainer.innerHTML = tmpTable;
                 document.getElementById("calendarHeader").innerHTML = "<h1 class='dateHeader'>" + _monthsOfTheYear[pCurrentMonth] + " " + pCurrentYear + "</h1>";
         }
 
-        _ButtonPreviousMonth.addEventListener('click', toPreviousMonth);
-        _ButtonNextMonth.addEventListener('click', toNextMonth);
+        // setting buttons to call toPreviousMonth and toNextMonth respectively on click
+        _buttonPreviousMonth.addEventListener('click', toPreviousMonth);
+        _buttonNextMonth.addEventListener('click', toNextMonth);
+        _buttonThisMonth.addEventListener('click', toCurrentMonth);
 
+        // renders previous month
         function toPreviousMonth()
         {
                 if (_currentMonth == 0)
@@ -145,6 +158,7 @@
                 return true;
         }
 
+        // renders next month
         function toNextMonth()
         {
                 if (_currentMonth == 11)
@@ -159,6 +173,15 @@
                 generateCalendar(_currentYear, _currentMonth);
                 return true;
         }
+
+        // renders current month
+        function toCurrentMonth()
+        {
+
+            generateCalendar(_todaysDate.getFullYear(), _todaysDate.getMonth());
+            return true;
+        }
+
         generateCalendar(_currentYear, _currentMonth);
     </script>
 </body>

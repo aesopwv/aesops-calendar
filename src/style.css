@@ -1,150 +1,89 @@
-/* Full-screen layout */
-body, html {
-margin: 0;
-padding: 0;
-height: 100%;
-width: 100%;
-display: flex;
-justify-content: center;
-align-items: center;
-background-color: #f0f2f5;
-font-family: 'Segoe UI', sans-serif;
+#calendar
+{
+    background-color: #333;
 }
 
-/* Calendar container */
-#calendar {
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 100%;
-background-color: #ffffff;
+#calendar-header
+{
+    font-size: 25px;
+    color: #eee;
+    font-family:Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+table.calendar-table
+{
+    border-collapse: collapse;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Top month navigation bar */
-#calendar-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-background-color: #0078d7;
-color: white;
-padding: 15px 25px;
-font-size: 1.6em;
-font-weight: bold;
+#calendarHeader
+{
+    border-radius: 1px;
+    text-align: left;
+    flex: 1;
+
+}
+.calendar-table 
+{
+    width: 60%;
+    table-layout: fixed;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Navigation buttons */
-.calendar-btn {
-background-color: white;
-color: #0078d7;
-border: none;
-border-radius: 6px;
-font-size: 1.5em;
-width: 50px;
-height: 50px;
-cursor: pointer;
-transition: background-color 0.2s ease;
+div.day
+{
+    border: 1px solid black;
+    text-align: left;
+    border-collapse: collapse;
+    padding-top: 60%;
+    color: #eee;
+    font-family:Arial, Helvetica, sans-serif;
 }
-
-.calendar-btn:hover {
-background-color: #e0e0e0;
+th.day
+{
+    font-weight: bold;
+    font-family:Arial, Helvetica, sans-serif;   
+    color: #eee;
+    background-color: rgb(234, 86, 86);
+    border-color: #333;
 }
-
-/* Day of week header row */
-#dayHeaders {
-display: grid;
-grid-template-columns: repeat(7, 1fr);
-background-color: #eaf3ff;
-text-align: center;
-border-bottom: 2px solid #0078d7;
+.thisMonth
+{
+    color: #eee;
 }
+.lastMonth
+{
+    color: #ccc;
+    background-color: #333;
+    border-color: #eee;
 
-.day div {
-padding: 25px 0;
-font-size: 1.3em;
-font-weight: bold;
-color: #0078d7;
-border-right: 1px solid #d0e3ff;
-box-sizing: border-box;
 }
-
-.day div:last-child {
-border-right: none;
+.nextMonth
+{
+    color: #ccc;
+    background-color: #333;
+    border-color: #eee;
 }
-
-/* Main date grid */
-#mainContent {
-flex-grow: 1;
-display: grid;
-grid-template-columns: repeat(7, 1fr);
-grid-template-rows: repeat(6, 1fr);
-border-top: 1px solid #ccc;
+.calendar-btn
+{
+    display: flex;
+    color: #333;
+    background-color: #eee;
+    border: none;
+    border-radius: 1px;
+    font-size: 15px;
 }
-
-/* Each day cell */
-#mainContent div {
-display: flex;
-align-items: center;
-justify-content: center;
-border: 1px solid #ccc;
-box-sizing: border-box;
-font-size: 1.1em;
-transition: 0.2s;
+.calendar-btn:hover
+{
+    background-color: #aaa;
 }
-
-/* Day category colors */
-.lastMonth {
-color: #aaa;
-background-color: #fafafa;
-}
-
-.thisMonth {
-color: #333;
-background-color: #fff;
-font-weight: 500;
-}
-
-.nextMonth {
-color: #aaa;
-background-color: #fafafa;
-}
-
-/* Hover and active styling */
-.thisMonth:hover {
-background-color: #0078d7;
-color: white;
-}
-
-/* Highlight today's date */
-.today {
-background-color: #ff9800;
-color: white;
-font-weight: bold;
-border: 3px solid #e67e22;
-box-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-#calendar-header {
-font-size: 1.2em;
-padding: 10px;
-}
-
-```
-#dayHeaders div {
-    font-size: 1em;
-    padding: 15px 0;
-}
-
-.calendar-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2em;
-}
-
-#mainContent div {
-    font-size: 0.9em;
-}
-```
-
+.calendar-btn:active
+{
+    background-color: #898989;
+    transform: translateY(1px);
 }
