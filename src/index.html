@@ -20,15 +20,17 @@
             <button class='calendar-btn' id="next">&gt;</button>
         </div>
         <div id="mainContent"></div>
+        <div id="agendaDisplay"></div>
     </div>
     <script>
         let _currentDate = new Date();
         let _currentMonth = _currentDate.getMonth();
         let _currentYear = _currentDate.getFullYear();
-        const _todaysDate = new Date;
+        const _todaysDate = new Date();
         const _buttonPreviousMonth = document.getElementById('prev');
         const _buttonNextMonth = document.getElementById('next');
         const _buttonThisMonth = document.getElementById('current');
+        const _agendaRenderContainer = document.getElementById('agendaDisplay');
         const _calendarRenderContainer = document.getElementById('mainContent');
         const _daysOfTheWeek = ( 
                     ["Sun",
@@ -39,21 +41,20 @@
                     "Fri", 
                     "Sat"
                     ]);
-
         const _monthsOfTheYear = (
-                ["January", 
-                "February", 
-                "March", 
-                "April", 
-                "May", 
-                "June",
-                "July", 
-                "August", 
-                "September", 
-                "October",
-                "November", 
-                "December"
-                ]);
+                    ["January", 
+                    "February", 
+                    "March", 
+                    "April", 
+                    "May", 
+                    "June",
+                    "July", 
+                    "August", 
+                    "September", 
+                    "October",
+                    "November", 
+                    "December"
+                    ]);
                 
         
         // calculates the number of days in a given month of a year
@@ -137,6 +138,20 @@
                 document.getElementById("calendarHeader").innerHTML = "<h1 class='dateHeader'>" + _monthsOfTheYear[pCurrentMonth] + " " + pCurrentYear + "</h1>";
         }
 
+        // function to generate agenda for the day selected
+        function generateAgenda(pCurrentYear, pCurrentMonth, pCurrentDay)
+        {
+            let tmpAgendaHeader = "<h1 class='agendaHeader'>" + pCurrentMonth + pCurrentDay + ", " + pCurrentYear + "</h1>";
+            let tmpAgenda = "<table class='agenda'>";
+            let tmpAgendaRowIndex = 10;
+            
+            for (i = 0; i < tmpAgendaRowIndex; i++)
+            {
+                tmpAgenda += "<tr>" + "<td>" + " " + "</td>" + "</tr>";
+            }
+            
+        }  
+
         // setting buttons to call toPreviousMonth and toNextMonth respectively on click
         _buttonPreviousMonth.addEventListener('click', toPreviousMonth);
         _buttonNextMonth.addEventListener('click', toNextMonth);
@@ -183,6 +198,7 @@
         }
 
         generateCalendar(_currentYear, _currentMonth);
+        generateAgenda(_currentYear, _currentMonth, _currentDate);
     </script>
 </body>
 </html>
