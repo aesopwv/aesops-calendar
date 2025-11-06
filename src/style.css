@@ -50,12 +50,17 @@ table.calendar-table
     align-items: center;
     justify-content: center;
 }
-
-.agendaHeader
+.agenda-header-container
 {
-    white-space: nowrap;
     background-color:rgb(234, 86, 86);
-    margin-bottom: -1px;
+    font-size: 12px;
+    color: #eee;
+    font-family:Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: -5px;
     max-width: 300px;
     min-width: 300px;
 }
@@ -64,9 +69,11 @@ table.calendar-table
 {
     white-space: nowrap;
     border: 1px solid black;
-    margin-top: 1px;
+    margin-top: 30px;
     min-width: 300px;
     max-width: 300px;
+    max-height: 28px;
+    min-height: 28px;
 }
 
 #day

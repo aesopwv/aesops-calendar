@@ -7,6 +7,8 @@
         const _buttonPreviousMonth = document.getElementById('prev');
         const _buttonNextMonth = document.getElementById('next');
         const _buttonThisMonth = document.getElementById('current');
+        const _buttonPreviousDay = document.getElementById('agendaPrev');
+        const _buttonNextDay = document.getElementById('agendaNext');
         const _agendaRenderContainer = document.getElementById('agendaDisplay');
         const _calendarRenderContainer = document.getElementById('mainContent');
         const _daysOfTheWeek = ( 
@@ -32,7 +34,6 @@
                     "November", 
                     "December"
                     ]);
-                
         
         // calculates the number of days in a given month of a year
         function daysInCalendarMonth(pYear, pMonth)
@@ -43,6 +44,8 @@
         // generates calendar
         function generateCalendar(pCurrentYear, pCurrentMonth)
         {
+            let tmpCurrentYearAsInt = parseInt(pCurrentYear, 10);
+            let tmpCurrentMonthAsInt = parseInt(pCurrentMonth, 10);
             let tmpTable = '<table class="calendar-table">';
             tmpTable += '<tr>';
             for ( i = 0; i < 7; i++)
@@ -82,12 +85,19 @@
                     // if it's before the first day of this month
                     if ( tmpWeekDayIndex < tmpWeekDayIndexOfTheFirstDayOfTheCurrentMonth)
                     {
-                        tmpTable += '<td><div id="day" class="lastMonth monthDay" data-i-day="' + tmpCurrentlyRenderingDayOfLastMonth + '" data-i-month="' + pCurrentMonth +'" data-i-year="' + pCurrentYear + '">' + tmpCurrentlyRenderingDayOfLastMonth + '</div></td>';
+                        if ( tmpCurrentMonthAsInt == 0)
+                        {
+                            tmpTable += `<td><div id="day" class="lastMonth monthDay" data-i-day="${tmpCurrentlyRenderingDayOfLastMonth}" data-i-month="11" data-i-year="${pCurrentYear - 1}">${tmpCurrentlyRenderingDayOfLastMonth}</div></td>`;
+                        }
+                        else
+                        {
+                            tmpTable += `<td><div id="day" class="lastMonth monthDay" data-i-day="${tmpCurrentlyRenderingDayOfLastMonth}" data-i-month="${tmpCurrentMonthAsInt - 1}" data-i-year="${pCurrentYear}">${tmpCurrentlyRenderingDayOfLastMonth}</div></td>`;
+                        }
                         tmpCurrentlyRenderingDayOfLastMonth++;
                     }
                     else
                     {
-                        tmpTable += '<td><div id="day" class="thisMonth monthDay" data-i-day="' + tmpCurrentlyRenderingDayOfThisMonth + '" data-i-month="' + pCurrentMonth +'" data-i-year="' + pCurrentYear + '">' + tmpCurrentlyRenderingDayOfThisMonth + '</div></td>';
+                        tmpTable += `<td><div id="day" class="thisMonth monthDay" data-i-day="${tmpCurrentlyRenderingDayOfThisMonth}" data-i-month="${tmpCurrentMonthAsInt}" data-i-year="${pCurrentYear}">${tmpCurrentlyRenderingDayOfThisMonth}</div></td>`;
                         tmpCurrentlyRenderingDayOfThisMonth++;
                     }
                 }
@@ -96,12 +106,22 @@
                 {
                     if ( tmpCurrentlyRenderingDayOfThisMonth <= tmpNumberOfDaysInTheMonth)
                     {
-                        tmpTable += '<td><div id="day" class="thisMonth monthDay" data-i-day="' + tmpCurrentlyRenderingDayOfThisMonth + '" data-i-month="' + pCurrentMonth +'" data-i-year="' + pCurrentYear + '">' + tmpCurrentlyRenderingDayOfThisMonth + '</div></td>';
+                        tmpTable += `<td><div id="day" class="thisMonth monthDay" data-i-day="${tmpCurrentlyRenderingDayOfThisMonth}" data-i-month="${tmpCurrentMonthAsInt}" data-i-year="${pCurrentYear}">${tmpCurrentlyRenderingDayOfThisMonth}</div></td>`;
                         tmpCurrentlyRenderingDayOfThisMonth++;
                     }
                     else
                     {
-                        tmpTable += '<td><div id="day" class="nextMonth monthDay" data-i-day="' + tmpCurrentlyRenderingDayOfNextMonth + '" data-i-month="' + pCurrentMonth +'" data-i-year="' + pCurrentYear + '">' + tmpCurrentlyRenderingDayOfNextMonth + '</div></td>';
+                        tmpTable += `<td><div id="day" class="nextMonth monthDay" data-i-day="${tmpCurrentlyRenderingDayOfNextMonth}" data-i-month="`;
+                        if ( tmpCurrentMonthAsInt == 11)
+                        {
+                            tmpTable += 0;
+                            tmpTable += `" data-i-year="${tmpCurrentYearAsInt + 1}">${tmpCurrentlyRenderingDayOfNextMonth}</div></td>`;
+                        }
+                        else
+                        {
+                            tmpTable += (tmpCurrentMonthAsInt + 1);
+                            tmpTable += `" data-i-year="${pCurrentYear}">${tmpCurrentlyRenderingDayOfNextMonth}</div></td>`;
+                        }
                         tmpCurrentlyRenderingDayOfNextMonth++;
                     }
                 }
@@ -113,43 +133,18 @@
             }
                 tmpTable += '</table>';
                 _calendarRenderContainer.innerHTML = tmpTable;
-                document.getElementById("calendarHeader").innerHTML = '<h1 class="dateHeader">' + _monthsOfTheYear[pCurrentMonth] + ' ' + pCurrentYear + '</h1>';
+                document.getElementById("calendarHeader").innerHTML = `<h1 class="dateHeader">${_monthsOfTheYear[pCurrentMonth]} ${pCurrentYear}</h1>`;
                 // getting the day month and year of day divs on click
                 const tmpDayDivs = document.getElementsByClassName("monthDay");
                 // for each div
                 for (let tmpDiv of tmpDayDivs)
                 {
-                    let tmpYear = Number(tmpDiv.dataset.iYear);
-                    let tmpMonth = Number(tmpDiv.dataset.iMonth);
-                    let tmpDay = Number(tmpDiv.dataset.iDay);
-                    // if it's the month before -1
-                    if (tmpDiv.classList.contains("lastMonth"))
-                    {
-                        tmpMonth--
-                    }
-                    // if it's the month after +1
-                    else if (tmpDiv.classList.contains("nextMonth"))
-                    {
-                        tmpMonth++
-                    }
-                    // if the month is below 0 then set it to 11 and increment year by -1
-                    if (tmpMonth < 0)
-                    {
-                        tmpMonth = 11
-                        tmpYear--;
-                    }
-                    // if the month is greater than 11 then set it to 0 and increment year by 1
-                    else if (tmpMonth > 11)
-                    {
-                        tmpMonth = 0;
-                        tmpYear++; 
-                    }
                     // making it run the agenda on click of the div
-                    tmpDiv.addEventListener("click", function()
-                        {
-                            generateAgenda(tmpYear, tmpMonth, tmpDay);
-                        });
-                }
+                    tmpDiv.addEventListener("click", function ()
+                    {  
+                        setCurrentDay(tmpDiv.getAttribute("data-i-year"), tmpDiv.getAttribute("data-i-month"), tmpDiv.getAttribute("data-i-day"));
+                    });
+            }
         }
 
         // function to generate agenda for the day selected
@@ -158,6 +153,7 @@
             let tmpAgendaHeader = '<h1 class="agendaHeader">' + _monthsOfTheYear[pCurrentMonth] + ' ' + pCurrentDay + ', ' + pCurrentYear + '</h1>';
             // creating categories and events columns
             let tmpAgenda = '<table class="agenda"><tr class="categories"><td>Time</td><td>Event</td></tr>';
+            let tmpAgendaHeaderContainer = document.getElementById("agendaHeader");
             let tmpAgendaTime = _timeOfDay;
             let tmpAgendaRowIndex = 10;
             
@@ -176,53 +172,92 @@
             }
             tmpEvent = document.getElementById("event");
             _agendaRenderContainer.innerHTML = "";
-            _agendaRenderContainer.innerHTML += tmpAgendaHeader;
+            tmpAgendaHeaderContainer.innerHTML = tmpAgendaHeader;
             _agendaRenderContainer.innerHTML += tmpAgenda;  
+        }
+
+        function setCurrentDay(pYear, pMonth, pDay)
+        {
+            _currentYear = pYear;
+            _currentMonth = pMonth;
+            _currentDay = pDay;
+            console.log(`The current date is: ${(pMonth + 1)}/${pDay}/${pYear}`);
+            generateCalendar(pYear, pMonth);
+            generateAgenda(pYear, pMonth, pDay);
         }
 
         // setting buttons to call toPreviousMonth and toNextMonth respectively on click
         _buttonPreviousMonth.addEventListener('click', toPreviousMonth);
         _buttonNextMonth.addEventListener('click', toNextMonth);
         _buttonThisMonth.addEventListener('click', toCurrentMonth);
+        _buttonNextDay.addEventListener('click', toNextAgendaDay);
+        _buttonPreviousDay.addEventListener('click', toPreviousAgendaDay);
 
         // renders previous month
         function toPreviousMonth()
         {
-                if (_currentMonth == 0)
-                {
-                    _currentYear--;
-                    _currentMonth = 11;
-                }
-                else
-                {
-                    _currentMonth--;
-                }
-                generateCalendar(_currentYear, _currentMonth);
-                return true;
+            if ( _currentMonth == 0)
+            {
+                _currentMonth = 11;
+                _currentYear--;
+            }
+            else
+            {
+                _currentMonth--;
+            }
+            setCurrentDay(_currentYear, _currentMonth, _currentDay);
         }
 
         // renders next month
         function toNextMonth()
         {
-                if (_currentMonth == 11)
-                {
-                    _currentYear++;
-                    _currentMonth = 0;
-                }
-                else
-                {
-                    _currentMonth++;
-                }
-                generateCalendar(_currentYear, _currentMonth);
-                return true;
+            if ( _currentMonth == 11)
+            {
+                _currentMonth = 0;
+                _currentYear++;
+            }
+            else
+            {
+                _currentMonth++;
+            }
+            setCurrentDay(_currentYear, _currentMonth, _currentDay);
         }
 
         // renders current month
         function toCurrentMonth()
         {
-
-            generateCalendar(_todaysDate.getFullYear(), _todaysDate.getMonth());
-            return true;
+            setCurrentDay(_todaysDate.getFullYear(), _todaysDate.getMonth(), _todaysDate.getDate());
         }
 
-        generateCalendar(_currentYear, _currentMonth);
+        function toNextAgendaDay()
+        {
+            console.log(`Agenda day is: ${_currentDay}`);
+            if ( _currentDay >= daysInCalendarMonth(_currentYear, _currentMonth))
+            {
+                _currentDay = 1;
+                toNextMonth();
+            }
+            else
+            {
+                _currentDay++; 
+                setCurrentDay(_currentYear, _currentMonth, _currentDay);
+            }
+            console.log(`Agenda day changed to: ${_currentDay}`);
+        }
+
+        function toPreviousAgendaDay()
+        {
+            console.log(`Agenda day is: ${_currentDay}`);
+            if ( _currentDay == 1)
+            {
+                _currentDay = daysInCalendarMonth(_currentYear, _currentMonth - 1);
+                toPreviousMonth();
+            }
+            else
+            {
+                _currentDay--;
+                setCurrentDay(_currentYear, _currentMonth, _currentDay);
+            }
+            console.log(`Agenda day changed to: ${_currentDay}`);
+        }
+        setCurrentDay(_currentYear, _currentMonth, _currentDay);
