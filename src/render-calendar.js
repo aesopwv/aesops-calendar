@@ -9,6 +9,8 @@
         const _buttonThisMonth = document.getElementById('current');
         const _buttonPreviousDay = document.getElementById('agendaPrev');
         const _buttonNextDay = document.getElementById('agendaNext');
+        const _buttonPreviousYear = document.getElementById('prevYear');
+        const _buttonnextYear = document.getElementById('nextYear');
         const _agendaRenderContainer = document.getElementById('agendaDisplay');
         const _calendarRenderContainer = document.getElementById('mainContent');
         const _daysOfTheWeek = ( 
@@ -133,7 +135,7 @@
             }
                 tmpTable += '</table>';
                 _calendarRenderContainer.innerHTML = tmpTable;
-                document.getElementById("calendarHeader").innerHTML = `<h1 class="dateHeader">${_monthsOfTheYear[pCurrentMonth]} ${pCurrentYear}</h1>`;
+                document.getElementById("calendarHeader").innerHTML = `<h1 class="dateHeader"><b>${_monthsOfTheYear[pCurrentMonth]}</b> ${pCurrentYear}</h1>`;
                 // getting the day month and year of day divs on click
                 const tmpDayDivs = document.getElementsByClassName("monthDay");
                 // for each div
@@ -150,7 +152,7 @@
         // function to generate agenda for the day selected
         function generateAgenda(pCurrentYear, pCurrentMonth, pCurrentDay)
         {
-            let tmpAgendaHeader = '<h1 class="agendaHeader">' + _monthsOfTheYear[pCurrentMonth] + ' ' + pCurrentDay + ', ' + pCurrentYear + '</h1>';
+            let tmpAgendaHeader = `<h1 class="agendaHeader">${_monthsOfTheYear[pCurrentMonth]} ${pCurrentDay}, ${pCurrentYear}</h1>`;
             // creating categories and events columns
             let tmpAgenda = '<table class="agenda"><tr class="categories"><td>Time</td><td>Event</td></tr>';
             let tmpAgendaHeaderContainer = document.getElementById("agendaHeader");
@@ -192,6 +194,22 @@
         _buttonThisMonth.addEventListener('click', toCurrentMonth);
         _buttonNextDay.addEventListener('click', toNextAgendaDay);
         _buttonPreviousDay.addEventListener('click', toPreviousAgendaDay);
+        _buttonPreviousYear.addEventListener('click', toPreviousYear);
+        _buttonnextYear.addEventListener('click', toNextYear);
+
+        // renders previous year
+        function toPreviousYear()
+        {
+            _currentYear--;
+            setCurrentDay(_currentYear, _currentMonth, _currentDay);
+        }
+
+        // renders next year
+        function toNextYear()
+        {
+            _currentYear++;
+            setCurrentDay(_currentYear, _currentMonth, _currentDay);
+        }
 
         // renders previous month
         function toPreviousMonth()

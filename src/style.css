@@ -2,32 +2,55 @@ body
 {
     background-color: #333;
 }
+h1
+{
+    font-weight:normal;
+}
 #calendar
 {
     background-color: #333;
+    display: inline-grid;
 }
 
 #calendar-header
 {
     font-size: 25px;
     color: #eee;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: CircularStd, sans-serif;
     display: flex;
+    flex: 1;
     align-items: center;
-    justify-content: center;
     gap: 10px;
 }
-#calendar-and-agenda
+#calendar-header {
+    font-size: 25px;
+    color: #eee;
+    font-family: CircularStd, sans-serif;   
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* pushes text left, buttons right */
+}
+#agenda-and-calendar-grid
+{
+    display:flex;
+}
+.agenda-button
+{
+    border: none;
+    box-shadow: none;
+    border-radius: 3px;
+}
+/*#calendar-and-agenda
 {
     display: flex;
     flex: 1;
-}
+}*/
 #agendaDisplay
 {
     position: relative;
     top: -25px;
     color: #eee;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: CircularStd, sans-serif;   
     max-height: 250px;
 }
 table.calendar-table
@@ -52,10 +75,12 @@ table.calendar-table
 }
 .agenda-header-container
 {
-    background-color:rgb(234, 86, 86);
+    background-color:cadetblue;
+    background-image: linear-gradient(1deg, cadetblue, rgb(73, 168, 142) 99%);
+    border-radius: 3px;
     font-size: 12px;
     color: #eee;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: CircularStd, sans-serif;   
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,28 +103,31 @@ table.calendar-table
 
 #day
 {
+    border-radius: 3px; 
     border: 1px solid black;
     text-align: left;
     border-collapse: collapse;
     padding-top: 60%;
     color: #eee;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: CircularStd, sans-serif;   
 }
 th.day
 {
     font-weight: bold;
-    font-family:Arial, Helvetica, sans-serif;   
+    font-family: CircularStd, sans-serif;   
     color: #eee;
-    background-color: rgb(234, 86, 86);
+    background-color: cadetblue;
+    background-image: linear-gradient(1deg, cadetblue, rgb(73, 168, 142) 99%);
     border-color: #333;
 }
+
 .thisMonth
 {
     color: #eee;
 }
 .lastMonth
 {
-    color: #ccc;
+    color: #989898;
     background-color: #333;
     border-color: #eee;
 
@@ -110,7 +138,7 @@ th.day
     background-color: #333;
     border-color: #eee;
 }
-.calendar-btn
+/*.calendar-btn
 {
     display: flex;
     color: #333;
@@ -118,13 +146,44 @@ th.day
     border: none;
     border-radius: 1px;
     font-size: 15px;
+}*/
+
+/* CSS */
+.calendar-btn {
+    align-items: center;
+    appearance: none;
+    background-color: #3EB2FD;
+    background-image: linear-gradient(1deg, cadetblue, rgb(73, 168, 142) 99%);
+    background-size: calc(100% + 20px) calc(100% + 20px);
+    border-radius: 3px;
+    border-width: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: CircularStd,sans-serif;
+    font-size: 1rem;
+    height: auto;
+    justify-content: center;
+    line-height: 1.5;
+    padding: 6px 20px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color .2s,background-position .2s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: top;
+    white-space: nowrap;
 }
-.calendar-btn:hover
-{
-    background-color: #aaa;
+
+.calendar-btn:active,
+.calendar-btn:focus {
+    outline: none;
 }
-.calendar-btn:active
-{
-    background-color: #898989;
-    transform: translateY(1px);
+
+.calendar-btn:hover {
+    background-position: -20px -20px;
 }
